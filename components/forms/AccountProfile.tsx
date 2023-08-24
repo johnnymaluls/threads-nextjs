@@ -68,7 +68,7 @@ const AccountProfile = ({ user, btnTitle }: Props) => {
 
     await updateUser({
       name: values.name,
-      path: pathname,
+      path: pathname, //from usePath /next/navigation
       username: values.username,
       userId: user.id,
       bio: values.bio,
