@@ -1,4 +1,5 @@
-import { fetchUser } from "@/lib/actions/user.action";
+import PostThread from "@/components/forms/PostThread";
+import { fetchUser } from "@/lib/actions/user.actions";
 import { currentUser } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 
@@ -13,9 +14,10 @@ const Page = async () => {
   if (!userInfo?.onboarded) redirect("/onboarding");
 
   return (
-    <div>
+    <>
       <h1 className="text-heading2-bold text-light-1">Create Thread</h1>
-    </div>
+      <PostThread userId={userInfo.id} />
+    </>
   );
 };
 

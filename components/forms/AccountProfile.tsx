@@ -23,7 +23,7 @@ import { useUploadThing } from "@/lib/uploadthing";
 import { isBase64Image } from "@/lib/utils";
 
 import { UserValidation } from "@/lib/validations/user";
-import { updateUser } from "@/lib/actions/user.action";
+import { updateUser } from "@/lib/actions/user.actions";
 
 interface Props {
   user: {
