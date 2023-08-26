@@ -17,24 +17,24 @@ export const createThread = async ({
   author,
   communityId,
   path,
-}: Params) => {
+}: Params): Promise<void> => {
   try {
     connectToDatabase();
-    const createThread = await Thread.create({
+    const createdThread = await Thread.create({
       text,
       author,
-      community: null,
+      community: communityId,
     });
 
     // Update user model
     await User.findByIdAndUpdate(author, {
-      $push: { threads: createThread._id },
+      $push: { threads: createdThread._id },
     });
 
     revalidatePath(path);
 
     // Update community model
   } catch (error: any) {
-    throw new Error(`Failed to fetch user: ${error.message}`);
+    throw new Error(`Failed to create thread: ${error.message}`);
   }
 };

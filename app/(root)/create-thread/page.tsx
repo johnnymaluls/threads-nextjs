@@ -9,6 +9,7 @@ const Page = async () => {
   if (!user) return null; //return if there are no user
 
   const userInfo = await fetchUser(user.id);
+  console.log(userInfo);
 
   // Redirect if user is not yet onboarded
   if (!userInfo?.onboarded) redirect("/onboarding");
@@ -16,7 +17,7 @@ const Page = async () => {
   return (
     <>
       <h1 className="text-heading2-bold text-light-1">Create Thread</h1>
-      <PostThread userId={userInfo.id} />
+      <PostThread userId={userInfo._id} />
     </>
   );
 };
