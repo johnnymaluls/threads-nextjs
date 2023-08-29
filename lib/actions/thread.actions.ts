@@ -46,6 +46,7 @@ export async function fetchThreads(pageNumber = 1, pageSize = 20) {
   const skipAmount = (pageNumber - 1) * pageSize;
 
   // Create a query to fetch the threads that have no parent (top-level threads) (a thread that is not a comment/reply).
+  // Find all threads where parentId is equal to null or undefined
   const threadsQuery = Thread.find({ parentId: { $in: [null, undefined] } })
     .sort({ createdAt: "desc" })
     .skip(skipAmount)

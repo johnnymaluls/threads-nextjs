@@ -1,9 +1,11 @@
 import ThreadCard from "@/components/cards/ThreadCard";
 import { fetchThreads } from "@/lib/actions/thread.actions";
+import { currentUser } from "@clerk/nextjs";
 
 const Home = async () => {
   const result = await fetchThreads(1, 30);
-  console.log(result);
+  const user = await currentUser();
+
   return (
     <>
       <h1 className="head-text text-left">Home</h1>
@@ -15,7 +17,17 @@ const Home = async () => {
         ) : (
           <>
             {result.threads.map((thread) => (
-              <ThreadCard />
+              <ThreadCard
+                key={thread._id}
+                id={thread._id}
+                currentUserId={user?.id || ""}
+                parentId={thread.parentId}
+                content={thread.text}
+                author={thread.author}
+                community={thread.community}
+                createdAt={thread.createdAt}
+                comments={thread.children}
+              />
             ))}
           </>
         )}
