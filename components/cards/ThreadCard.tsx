@@ -38,9 +38,9 @@ const ThreadCard = ({
   comments,
 }: Props) => {
   return (
-    <article className="flex w-full flex-col rounded-xl bg-dark-2 p-7">
+    <article className="w-full flex flex-col rounded-xl bg-dark-2 p-7">
       <div className="flex items-start justify-between">
-        <div className="flex w-full flex-1 flex-row gap-4">
+        <div className="w-full flex flex-1 flex-row gap-4">
           <div className="flex flex-col items-center">
             <Link href={`/profile/${author.id}`} className="relative h-11 w-11">
               <Image
