@@ -9,7 +9,6 @@ const Page = async () => {
   if (!user) return null; //return if there are no user
 
   const userInfo = await fetchUser(user.id);
-  console.log(userInfo);
 
   // Redirect if user is not yet onboarded
   if (!userInfo?.onboarded) redirect("/onboarding");

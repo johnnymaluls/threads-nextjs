@@ -11,7 +11,6 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,33 +37,31 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
   });
 
   const onSubmit = async (values: z.infer<typeof CommentValidation>) => {
-    await addCommentToThread(
-      threadId,
-      values.thread,
-      JSON.parse(currentUserId),
-      pathname
-    );
+    console.log("submit clicked");
+    // await addCommentToThread(
+    //   threadId,
+    //   values.thread,
+    //   JSON.parse(currentUserId),
+    //   pathname
+    // );
 
-    form.reset();
+    // form.reset();
 
-    router.push("/");
+    // router.push("/");
   };
 
   return (
     <Form {...form}>
-      <form
-        className="mt-10 flex items-center gap-4 border-y border-y-dark-4 py-5 max-xs:flex-col"
-        onSubmit={form.handleSubmit(onSubmit)}
-      >
+      <form className="comment-form" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="thread"
           render={({ field }) => (
-            <FormItem className="w-full flex items-center gap-3">
+            <FormItem className="flex w-full items-center gap-3">
               <FormLabel>
                 <Image
                   src={currentUserImg}
-                  alt="profile_image"
+                  alt="current_user"
                   width={48}
                   height={48}
                   className="rounded-full object-cover"
@@ -81,10 +78,8 @@ const Comment = ({ threadId, currentUserImg, currentUserId }: Props) => {
             </FormItem>
           )}
         />
-        <Button
-          type="submit"
-          className="rounded-3xl bg-primary-500 px-8 py-2 !text-small-regular text-light-1 max-xs:w-full"
-        >
+
+        <Button type="submit" className="comment-form_btn">
           Reply
         </Button>
       </form>

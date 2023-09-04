@@ -36,9 +36,14 @@ const ThreadCard = ({
   community,
   createdAt,
   comments,
+  isComment,
 }: Props) => {
   return (
-    <article className="w-full flex flex-col rounded-xl bg-dark-2 p-7">
+    <article
+      className={`w-full flex flex-col rounded-xl ${
+        isComment ? "px-0 xs:px-7" : "bg-dark-2 p-7"
+      }`}
+    >
       <div className="flex items-start justify-between">
         <div className="w-full flex flex-1 flex-row gap-4">
           <div className="flex flex-col items-center">
