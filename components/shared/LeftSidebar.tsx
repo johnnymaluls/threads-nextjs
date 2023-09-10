@@ -3,10 +3,11 @@ import { sidebarLinks } from "@/constants";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import { SignOutButton, SignedIn } from "@clerk/nextjs";
+import { SignOutButton, SignedIn, useAuth } from "@clerk/nextjs";
 
 const LeftSidebarLinks = () => {
   const pathname = usePathname(); //to get the current url
+  const { userId } = useAuth();
   return (
     <>
       {sidebarLinks.map((link) => {
@@ -14,6 +15,10 @@ const LeftSidebarLinks = () => {
         const isActive =
           (pathname.includes(link.route) && link.route.length > 1) ||
           pathname === link.route;
+
+        // Redirect to /profile/id
+        if (link.route === "/profile") link.route = `${link.route}/${userId}`;
+
         return (
           <Link
             href={link.route}

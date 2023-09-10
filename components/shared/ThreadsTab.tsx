@@ -11,6 +11,7 @@ interface Props {
 const ThreadsTab = async ({ currentUserId, accountId, accountType }: Props) => {
   // TODO: Fetch profile threads
   let result = await fetchUserThreads(accountId);
+  console.log(result);
 
   if (!result) redirect("/");
 
@@ -23,7 +24,15 @@ const ThreadsTab = async ({ currentUserId, accountId, accountType }: Props) => {
           currentUserId={currentUserId}
           parentId={thread.parentId}
           content={thread.text}
-          author={thread.author} // todo : update
+          author={
+            accountType === "User"
+              ? { name: result.name, image: result.image, id: result.id }
+              : {
+                  name: thread.author.name,
+                  image: thread.author.image,
+                  id: thread.author.id,
+                }
+          } // todo : update
           community={thread.community} // todo : update
           createdAt={thread.createdAt}
           comments={thread.children}

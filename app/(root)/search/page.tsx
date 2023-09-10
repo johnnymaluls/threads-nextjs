@@ -1,8 +1,23 @@
-const Page = () => {
+import { fetchUser } from "@/lib/actions/user.actions";
+import { currentUser } from "@clerk/nextjs";
+import { redirect } from "next/navigation";
+import Image from "next/image";
+
+const Page = async () => {
+  const user = await currentUser();
+
+  if (!user) return null; //return if there are no user
+
+  const userInfo = await fetchUser(user.id);
+
+  if (!userInfo?.onboarded) redirect("/onboarding"); // Redirect if user is not yet onboarded
+
+  // Fetch users
+
   return (
-    <div>
-      <h1 className="text-heading2-bold text-light-1">Search</h1>
-    </div>
+    <section>
+      <h1 className="head-text mb-10">Search</h1>
+    </section>
   );
 };
 

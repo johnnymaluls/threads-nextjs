@@ -1,5 +1,6 @@
 "use server";
 
+import { SortOrder } from "mongoose";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDatabase } from "../mongoose";
@@ -53,6 +54,32 @@ export async function fetchUser(userId: string) {
   }
 }
 
+export async function fetchUsers({
+  userId,
+  searchString = "",
+  pageNumber = 1,
+  pageSize = 20,
+  sortBy = "desc",
+}: {
+  userId: string;
+  searchString?: string;
+  pageNumber?: number;
+  pageSize?: number;
+  sortBy: SortOrder;
+}) {
+  try {
+    connectToDatabase();
+
+    const skipAmount = (pageNumber - 1) * pageSize;
+    const regex = new RegExp(searchString, "i");
+    const query = {
+      id: { $ne: userId },
+    };
+  } catch (error: any) {
+    throw new Error(`Failed to fetch users: ${error.message}`);
+  }
+}
+
 export async function fetchUserThreads(userId: string) {
   try {
     connectToDatabase();
@@ -73,7 +100,6 @@ export async function fetchUserThreads(userId: string) {
         },
       },
     });
-
     return threads;
   } catch (error: any) {
     throw new Error(`Failed to fetch user threads: ${error.message}`);
