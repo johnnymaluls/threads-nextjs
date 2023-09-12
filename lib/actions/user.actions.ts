@@ -1,6 +1,6 @@
 "use server";
 
-import { SortOrder } from "mongoose";
+import { FilterQuery, SortOrder } from "mongoose";
 import Thread from "../models/thread.model";
 import User from "../models/user.model";
 import { connectToDatabase } from "../mongoose";
@@ -71,10 +71,31 @@ export async function fetchUsers({
     connectToDatabase();
 
     const skipAmount = (pageNumber - 1) * pageSize;
-    const regex = new RegExp(searchString, "i");
-    const query = {
-      id: { $ne: userId },
+    const regex = new RegExp(searchString, "i"); // case insensitive regex
+    const query: FilterQuery<typeof User> = {
+      id: { $ne: userId }, // $ne = not equal to the current user
     };
+
+    if (searchString.trim() !== "") {
+      query.$or = [
+        { username: { $regex: regex } },
+        { name: { $regex: regex } },
+      ];
+    }
+
+    const sortOptions = { createdAt: sortBy };
+    const usersQuery = User.find(query)
+      .sort(sortOptions)
+      .skip(skipAmount)
+      .limit(pageSize);
+
+    const totalUserCount = await User.countDocuments(query);
+
+    const users = await usersQuery.exec();
+
+    const isNext = totalUserCount > skipAmount + users.length;
+
+    return { users, isNext };
   } catch (error: any) {
     throw new Error(`Failed to fetch users: ${error.message}`);
   }
