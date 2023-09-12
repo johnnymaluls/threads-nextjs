@@ -126,3 +126,19 @@ export async function fetchUserThreads(userId: string) {
     throw new Error(`Failed to fetch user threads: ${error.message}`);
   }
 }
+
+export async function getActivity(userId: string) {
+  try {
+    connectToDatabase();
+
+    // Find all threads created by the user
+    const userThreads = await Thread.find({ author: userId });
+
+    // Collect all the child thread ids (replies) from the 'children'
+    const childThreadIds = userThreads.reduce((acc, userThread) => {
+      return acc.concat(userThread.children);
+    });
+  } catch (error: any) {
+    throw new Error(`Failed to fetch user activity: ${error.message}`);
+  }
+}
