@@ -134,10 +134,29 @@ export async function getActivity(userId: string) {
     // Find all threads created by the user
     const userThreads = await Thread.find({ author: userId });
 
-    // Collect all the child thread ids (replies) from the 'children'
+    // Collect all the child thread ids (replies id) from the 'children'
     const childThreadIds = userThreads.reduce((acc, userThread) => {
       return acc.concat(userThread.children);
-    });
+    }, []);
+
+    const sortBy: SortOrder = "desc";
+    const sortOptions = { createdAt: sortBy };
+
+    // Collect all the replies where id is in childThreadIds and author is not equal to the userId ( current user )
+    // This will simply find all the comments the user received from their threads
+    const replies = await Thread.find({
+      _id: { $in: childThreadIds },
+      author: { $ne: userId },
+    })
+      .sort(sortOptions)
+      .populate({
+        path: "author",
+        model: User,
+        select: "name image _id",
+      });
+
+    console.log(replies);
+    return replies;
   } catch (error: any) {
     throw new Error(`Failed to fetch user activity: ${error.message}`);
   }
